@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Usuário</title>
+    <style>
+         body {
+            font-family: Arial, sans-serif;
+            background-color: #366CC8; /* Cor de fundo azul */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .navbar img {
+            height: 40px;
+        }
+
+        .navbar button {
+            background-color: #A02627;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .navbar button:hover {
+            background-color: #800000;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 600px;
+            margin-top: 80px; /* Espaço para a navbar */
+        }
+        h2 {
+            margin-bottom: 20px;
+            color: #A02627;
+        }
+        .form-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            width: 100%;
+            justify-items: center; /* Alinha os itens no centro das colunas */
+        }
+        .input-field {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+        input[type="text"], input[type="email"], input[type="password"], input[type="date"], input[type="tel"] {
+            padding: 10px;
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        label {
+            text-align: center;
+            display: block;
+            margin-bottom: 5px;
+            color: #A02627;
+            font-weight: bold;
+        }
+        .submit-button {
+            background-color: #A02627;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 20px;
+            grid-column: span 3; /* Faz o botão ocupar as três colunas */
+        }
+        .submit-button:hover {
+            background-color: #800000;
+        }
+        /* Styles for pop-ups */
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            text-align: center;
+            z-index: 1000;
+            transition: opacity 0.3s ease;
+        }
+        .hidden {
+            display: none;
+        }
+        .checkmark, .error-mark {
+            font-size: 40px;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .bottom-image {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            max-width: 100px;
+        }
+        .rights-reserved {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            font-size: 12px;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <img src="LogoPlataformaCurumim.png" alt="Plataforma Curumim">
+        <div>
+            <button onclick="window.location.href='/'">Empréstimo/Devolução</button>
+            <button onclick="window.location.href='/CadastroLivros'">Cadastro Livros</button>
+            <button onclick="window.location.href='/Contato'">Sobre</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Cadastro de Usuário</h2>
+        <form id="userRegistrationForm">
+            <div class="form-container">
+                <div class="input-field">
+                    <label for="rfidId">ID Usuário</label>
+                    <input type="text" id="rfidId" name="rfidId" required>
+                </div>
+                <div class="input-field">
+                    <label for="name">Nome</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="input-field">
+                    <label for="cpfCnpj">CPF/CNPJ</label>
+                    <input type="text" id="cpfCnpj" name="cpfCnpj" required>
+                </div>
+                <div class="input-field">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="input-field">
+                    <label for="username">Nome de Usuário</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="input-field">
+                    <label for="password">Senha</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <div class="input-field">
+                    <label for="dateOfBirth">Data de Nascimento</label>
+                    <input type="date" id="dateOfBirth" name="dateOfBirth" required>
+                </div>
+                <div class="input-field">
+                    <label for="numberPhone">Telefone</label>
+                    <input type="tel" id="numberPhone" name="numberPhone" required>
+                </div>
+                <div class="input-field">
+                    <label for="address">Endereço</label>
+                    <input type="text" id="address" name="address" required>
+                </div>
+                <div class="input-field">
+                    <label for="typeUser">Tipo de Usuário</label>
+                    <input type="text" id="typeUser" name="typeUser" required>
+                </div>
+            </div>
+            <button type="submit" class="submit-button">Cadastrar</button>
+        </form>
+    </div>
+
+    <div id="success-popup" class="popup hidden">
+        <span class="checkmark">✔️</span>
+        <p>Cadastro realizado com sucesso!</p>
+    </div>
+    <div id="error-popup" class="popup hidden">
+        <span class="error-mark">❌</span>
+        <p>Erro ao cadastrar. Tente novamente.</p>
+    </div>
+
+    <img src="Arandu.png" alt="Arandu Technology" class="bottom-image">
+    <div class="rights-reserved">Todos os direitos reservados 2024© Arandu™</div>
+
+    <script>
+        document.getElementById('userRegistrationForm').addEventListener('submit', async function(event) {
+            event.preventDefault(); // Prevenir recarregamento da página
+
+            const formData = {
+                idUser: document.getElementById('rfidId').value,
+                name: document.getElementById('name').value,
+                cpfCnpj: document.getElementById('cpfCnpj').value,
+                email: document.getElementById('email').value,
+                username: document.getElementById('username').value,
+                password: document.getElementById('password').value,
+                dateOfBirth: document.getElementById('dateOfBirth').value,
+                numberPhone: document.getElementById('numberPhone').value,
+                address: document.getElementById('address').value,
+                typeUser: document.getElementById('typeUser').value
+            };
+
+            // Validação simples usando regex (por exemplo, para e-mail)
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(formData.email)) {
+                showPopup('error');
+                return;
+            }
+
+            try {
+                // Enviando os dados para o backend
+                const response = await fetch('http://localhost:4001/api/management/register/user', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                if (response.ok) {
+                    showPopup('success');
+                    // Limpar o formulário após o cadastro
+                    document.getElementById('userRegistrationForm').reset();
+                } else {
+                    const errorData = await response.json();
+                    alert('Erro ao cadastrar usuário: ' + errorData.error);
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                showPopup('error');
+            }
+        });
+
+        function showPopup(type) {
+            const successPopup = document.getElementById('success-popup');
+            const errorPopup = document.getElementById('error-popup');
+
+            if (type === 'success') {
+                successPopup.classList.remove('hidden');
+                setTimeout(() => {
+                    successPopup.classList.add('hidden');
+                }, 3000); // Esconde após 3 segundos
+            } else {
+                errorPopup.classList.remove('hidden');
+                setTimeout(() => {
+                    errorPopup.classList.add('hidden');
+                }, 3000); // Esconde após 3 segundos
+            }
+        }
+    </script>
+</body>
+</html>

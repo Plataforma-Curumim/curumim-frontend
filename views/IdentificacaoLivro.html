@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Identificação do Livro</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #F9CF35; /* Cor de fundo amarela */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            position: relative;
+        }
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #fff;
+            display: flex;
+            justify-content: center; /* Alinha os botões no centro */
+            padding: 10px 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 1000; /* Garante que a navbar fique acima de outros elementos */
+        }
+        .navbar a {
+            color: #A02627;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 10px 20px;
+            margin: 0 5px;
+            border-radius: 5px;
+            background-color: #f5f5f5;
+            transition: background-color 0.3s, color 0.3s, transform 0.2s;
+        }
+        .navbar a:hover {
+            color: #fff;
+            background-color: #A02627;
+            transform: scale(1.05);
+        }
+        .navbar a.active {
+            background-color: #A02627;
+            color: #fff;
+        }
+        .top-image-container {
+            position: absolute;
+            top: 80px;
+            left: 10px;
+            background-color: #fff; /* Cor do retângulo */
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+        .top-image {
+            max-width: 150px;
+        }
+        .container {
+            background-color: #fff; /* Cor da caixa de texto da imagem */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        h2 {
+            margin-bottom: 20px;
+        }
+        .rfid-input {
+            margin-top: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 100%;
+            text-align: center;
+        }
+        .info {
+            margin-top: 20px;
+            font-size: 16px;
+            color: #000;
+            display: none;
+        }
+        .info strong {
+            font-weight: bold; /* Aplica o negrito */
+        }
+        .bottom-image {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            max-width: 100px;
+        }
+        .rights-reserved {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            font-size: 12px;
+            color: #fff;
+        }
+        .countdown {
+            display: none;
+            margin-top: 20px;
+            font-size: 16px;
+            color: #000;
+        }
+        .user-info {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #000;
+        }
+        .top-right-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: #fff; /* Cor branca */
+            color: #A02627; /* Cor do texto */
+            border: 2px solid #A02627; /* Borda vermelha */
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+        .top-right-button:hover {
+            background-color: #A02627;
+            color: #fff;
+        }
+
+        #book-not-found-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            text-align: center;
+            z-index: 1000;
+            display: none; 
+            width: 300px;
+        }
+
+    </style>
+    <script>
+        let countdownInterval;
+
+        function startCountdown(redirectUrl) {
+            let timeLeft = 10;
+            const countdownElement = document.getElementById('countdown');
+            countdownElement.style.display = 'block';
+            countdownInterval = setInterval(function() {
+                countdownElement.innerText = `Redirecionando em ${timeLeft} segundos...`;
+                timeLeft -= 1;
+                if (timeLeft < 0) {
+                    clearInterval(countdownInterval);
+                    window.location.href = redirectUrl;
+                }
+            }, 1000);
+        }
+
+        async function processRFIDIdentificationBook(event) {
+            if (event.key === 'Enter') {
+                const rfidId = event.target.value.trim();
+
+                if (rfidId.length === 0) {
+                    console.error('RFID não pode ser vazio');
+                    alert('Por favor, insira um RFID válido.');
+                    return;
+                }
+
+                try {
+                    const response = await fetch('http://localhost:4001/api/management/get/book', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ rfidId })
+                    });
+
+                    if (response.ok) {
+                        const dataBook = await response.json();
+                        console.log('Dados recebidos:', dataBook);
+
+                        // Armazenar os dados do livro no localStorage
+                        localStorage.setItem('title', dataBook.title || 'Título não disponível');
+                        localStorage.setItem('author', dataBook.author || 'Autor não disponível');
+                        localStorage.setItem('status', dataBook.status || 'status desconhecido');
+
+                        // Atualizar a exibição dos dados na página
+                        document.getElementById('title').innerHTML = `<strong>Título:</strong> ${dataBook.title || 'Título não disponível'}`;
+                        document.getElementById('author').innerHTML = `<strong>Autor:</strong> ${dataBook.author || 'Autor não disponível'}`;
+                        document.getElementById('status').innerHTML = `<strong>Status:</strong> ${dataBook.status || 'status desconhecido'}`;
+
+                        // Exibe o elemento de informação
+                        document.getElementById('info').style.display = 'block';
+                        startCountdown('/confirmacaoEmprestimo');
+
+                    } else {
+                        console.error('Erro ao buscar dados do livro');
+                        showBookNotFoundPopup(); // Chama a função para mostrar o pop-up
+                    }
+                } catch (error) {
+                    console.error('Erro na requisição:', error);
+                    showBookNotFoundPopup(); // Exibe o pop-up se ocorrer um erro
+                }
+            }
+        }
+
+        function showBookNotFoundPopup() {
+            const bookNotFoundPopup = document.getElementById('book-not-found-popup');
+            bookNotFoundPopup.style.display = 'block'; // Mostra o pop-up
+
+            // Oculta o pop-up após 3 segundos
+            setTimeout(() => {
+                bookNotFoundPopup.style.display = 'none';
+            }, 3000);
+        }
+
+        window.onload = function() {
+            const rfidInput = document.querySelector('.rfid-input');
+            rfidInput.focus();
+            rfidInput.addEventListener('keypress', processRFIDIdentificationBook);
+        };
+    </script>
+</head>
+<body>
+    <div class="navbar">
+        <a href="/">
+            <img src="LogoPlataformaCurumim.png" alt="Plataforma Curumim" class="top-image">
+        </a>
+        <a href="/">Empréstimo/Devolução</a>
+        <a href="/CadastroLivros">Cadastro de Livro</a>
+        <a href="/CadastroUsuario">Cadastro de Usuário</a>
+        <a href="/Contato">Sobre</a>
+    </div>
+    <div class="container">
+        <h2>📚 Identifique o Livro</h2>
+        <input type="text" class="rfid-input" placeholder="Aproxime o adesivo do livro no leitor" autofocus>
+        <div id="info" class="info">
+            <p id="title"><strong>Título:</strong></p>
+            <p id="author"><strong>Autor:</strong></p>
+            <p id="status"><strong>Status:</strong></p>
+        </div>
+        <div id="countdown" class="countdown"></div>
+    </div>
+
+    <div id="book-not-found-popup">
+        <span class="error-mark">❌</span>
+        <p>Livro não encontrado. Tente novamente!</p>
+    </div>
+
+    <img src="Arandu.png" alt="Arandu Technology" class="bottom-image">
+    <div class="rights-reserved">Todos os direitos reservados 2024© Arandu™</div>
+</body>
+</html>
