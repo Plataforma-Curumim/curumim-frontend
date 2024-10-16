@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agradecimento pela Visita</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #379448; /* Cor de fundo verde */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            position: relative;
+        }
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #fff;
+            display: flex;
+            justify-content: center; /* Alinha os botões no centro */
+            padding: 10px 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 1000; /* Garante que a navbar fique acima de outros elementos */
+        }
+        .navbar a {
+            color: #A02627;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 10px 20px;
+            margin: 0 5px;
+            border-radius: 5px;
+            background-color: #f5f5f5;
+            transition: background-color 0.3s, color 0.3s, transform 0.2s;
+        }
+        .navbar a:hover {
+            color: #fff;
+            background-color: #A02627;
+            transform: scale(1.05);
+        }
+        .navbar a.active {
+            background-color: #A02627;
+            color: #fff;
+        }
+        .top-image-container {
+            position: absolute;
+            top: 60px; /* Abaixo da navbar */
+            left: 20px;
+            background-color: #fff; /* Cor do retângulo */
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+        .top-image {
+            max-width: 150px;
+        }
+        .container {
+            background-color: #fff; /* Cor de fundo branca */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin-top: 80px; /* Espaço para a navbar */
+        }
+        h2 {
+            margin-bottom: 20px;
+            color: #A02627;
+        }
+        .message {
+            font-size: 16px;
+            color: #000;
+            margin-bottom: 20px;
+        }
+        .countdown {
+            font-size: 18px;
+            color: #A02627;
+            font-weight: bold;
+        }
+        .bottom-image {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            max-width: 100px;
+        }
+        .rights-reserved {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            font-size: 12px;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <img src="LogoPlataformaCurumim.png" alt="Plataforma Curumim" class="top-image">
+        <a href="/">Emprestimo/Devolução</a>
+        <a href="/CadastroLivros">Cadastro de Livro</a>
+        <a href="/CadastroUsuario">Cadastro de Usuário</a>
+        <a href="/Contato">Sobre</a>
+    </div>
+
+    <div class="container">
+        <h2>Obrigado pela Visita!</h2>
+        <div class="message">
+            <p>🎉 Uau! Muito obrigado por visitar nossa biblioteca! Esperamos que você tenha encontrado um livro incrível para mergulhar.</p>
+            <div class="info">
+                <p><span id="name"></span></p>
+                <p><strong>Nome do Usuário:</strong> <span id="name">Querido Leitor</span></p>
+                <p><strong>Título do Livro:</strong> <span id="title">Sua Leitura Fantástica</span></p>
+                <p><strong>Data de Devolução:</strong> <span id="returnDate">Em breve, muito em breve!</span></p>
+            </div>
+        </div>
+        <div id="countdown" class="countdown">Redirecionando em 10 segundos...</div>
+    </div>
+
+    <img src="Arandu.png" alt="Arandu Technology" class="bottom-image">
+    <div class="rights-reserved">Todos os direitos reservados 2024© Arandu™</div>
+
+    <script>
+        function startCountdown(seconds) {
+            const countdownElement = document.getElementById('countdown');
+            let timeLeft = seconds;
+
+            const interval = setInterval(() => {
+                countdownElement.textContent = `Redirecionando em ${timeLeft} segundos...`;
+                timeLeft -= 1;
+
+                if (timeLeft < 0) {
+                    clearInterval(interval);
+                    window.location.href = '/'; // Redirecionar para a página inicial ou qualquer outra página
+                console.log("Passoouuu")
+                }
+            }, 1000);
+        }
+        
+
+        window.onload = function() {
+            startCountdown(10);
+        }
+    </script>
+</body>
+</html>
+
+<!--<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agradecimento pela Visita</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #379448; /* Cor de fundo vermelha */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            position: relative;
+        }
+        .top-image-container {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: #fff; /* Cor do retângulo */
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+        .top-image {
+            max-width: 150px;
+        }
+        .container {
+            background-color: #fff; /* Cor de fundo branca */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        h2 {
+            margin-bottom: 20px;
+            color: #A02627;
+        }
+        .message {
+            font-size: 16px;
+            color: #000;
+            margin-bottom: 20px;
+        }
+        .countdown {
+            font-size: 18px;
+            color: #A02627;
+            font-weight: bold;
+        }
+        .bottom-image {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            max-width: 100px;
+        }
+        .rights-reserved {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            font-size: 12px;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="top-image-container">
+        <img src="LogoPlataformaCurumim.png" alt="Plataforma Curumim" class="top-image">
+    </div>
+    
+    <div class="container">
+        <h2>Obrigado pela Visita!</h2>
+        <div class="message">
+            <p>Agradecemos sua visita à nossa biblioteca. Esperamos que tenha encontrado tudo o que precisava.</p>
+            <p>Você será redirecionado para a página inicial em breve.</p>
+            <div class="info">
+                <p><strong>Nome do Usuário:</strong> <span id="name">Usuário</span></p>
+                <p><strong>Título do Livro:</strong> <span id="title">Título do Livro</span></p>
+                <p><strong>Data do Empréstimo:</strong> <span id="loanDate">__/__/____</span></p>
+                <p><strong>Data de Devolução:</strong> <span id="returnDate">__/__/____</span></p>
+            </div>
+        </div>
+        <div id="countdown" class="countdown">Redirecionando em 10 segundos...</div>
+    </div>
+    
+    <img src="Arandu.png" alt="Arandu Technology" class="bottom-image">
+    <div class="rights-reserved">Todos os direitos reservados 2023© Arandu™</div>
+
+    <script>
+        function startCountdown(seconds) {
+            const countdownElement = document.getElementById('countdown');
+            let timeLeft = seconds;
+
+            const interval = setInterval(() => {
+                countdownElement.textContent = `Redirecionando em ${timeLeft} segundos...`;
+                timeLeft -= 1;
+
+                if (timeLeft < 0) {
+                    clearInterval(interval);
+                    window.location.href = 'IdentificacaoUsuario.html'; // Redirecionar para a página inicial ou qualquer outra página
+                }
+            }, 1000);
+        }
+
+        window.onload = function() {
+            startCountdown(10); 
+        }
+    </script>
+</body>
+</html>
