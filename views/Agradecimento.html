@@ -115,6 +115,7 @@
         <div class="message">
             <p>🎉 Uau! Muito obrigado por visitar nossa biblioteca! Esperamos que você tenha encontrado um livro incrível para mergulhar.</p>
             <div class="info">
+                <p><span id="name"></span></p>
                 <p><strong>Nome do Usuário:</strong> <span id="name">Querido Leitor</span></p>
                 <p><strong>Título do Livro:</strong> <span id="title">Sua Leitura Fantástica</span></p>
                 <p><strong>Data de Devolução:</strong> <span id="returnDate">Em breve, muito em breve!</span></p>
@@ -137,13 +138,15 @@
 
                 if (timeLeft < 0) {
                     clearInterval(interval);
-                    window.location.href = 'IdentificacaoUsuario.html'; // Redirecionar para a página inicial ou qualquer outra página
+                    window.location.href = '/'; // Redirecionar para a página inicial ou qualquer outra página
+                console.log("Passoouuu")
                 }
             }, 1000);
         }
+        
 
         window.onload = function() {
-            startCountdown(40); 
+            startCountdown(10);
         }
     </script>
 </body>

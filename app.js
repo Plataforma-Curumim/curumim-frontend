@@ -23,7 +23,11 @@ app.get('/IdentificacaoLivro', (req, res) => {
 });
 
 app.get('/confirmacaoEmprestimo', (req, res) => {
-    res.sendFile(path.join(__dirname, 'views', 'confirmacaoEmprestimo.html'));
+    res.sendFile(path.join(__dirname, 'views', 'ConfirmacaoEmprestimo.html'));
+});
+
+app.get('/confirmacaoDevolucao', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'ConfirmacaDevolucao.html'));
 });
 
 app.get('/Agradecimento', (req, res) => {
@@ -127,7 +131,8 @@ app.post('/api/management/get/book', (req, res) => {
             publishDate: book.publishDate,
             physicalDimensions: book.physicalDimensions,
             publishPlaces: book.publishPlaces,
-            numberOfPages: book.numberOfPages
+            numberOfPages: book.numberOfPages,
+            status: 2
         };
         
         res.status(200).json(dataBook);
