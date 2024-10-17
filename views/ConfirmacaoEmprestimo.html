@@ -235,11 +235,15 @@ function processRFID(event) {
             if (data) {
                 localStorage.setItem('name', data.userName); // Salva o nome do usuário
                 localStorage.setItem('title', data.title); // Salva o título do livro
+
                 document.getElementById('name').innerText = data.userName || 'Usuário';
                 document.getElementById('title').innerText = data.title || 'Título do Livro';
+                
                 isRedirected = true; // Define a variável para indicar que o redirecionamento já ocorreu
                 clearInterval(countdownInterval); // Para o contador regressivo
+                
                 console.log('Redirecionando para Agradecimento.html');
+                
                 window.location.href = '/Agradecimento'; // Redireciona para a página de agradecimento
             } else {
                 console.error('Dados não encontrados para o RFID:', rfidValue);
@@ -250,6 +254,7 @@ function processRFID(event) {
         });
     }
 }
+
 // Função que roda quando a página carrega
 window.onload = function() {
     document.querySelector('.rfid-input').focus(); // Foca no campo RFID

@@ -338,6 +338,7 @@
             <table id="bookTableBody">
                 <thead>
                     <tr>
+                        <th>Status</th>
                         <th>RFID ID</th>
                         <th>Título</th>
                         <th>Subtítulo</th>
@@ -353,7 +354,7 @@
             </table>
 
         </div>
-        <script>
+        <!-- <script>
             async function fetchBookData() {
                 const isbn = document.getElementById('isbn').value.trim();
 
@@ -483,7 +484,155 @@
                 const row = button.parentElement.parentElement;
                 row.parentElement.removeChild(row);
             }
-        </script>
-</body>
+        </script> -->
+        <script>
+            async function fetchBookData() {
+                const isbn = document.getElementById('isbn').value.trim();
+        
+                if (!isbn) {
+                    alert('Por favor, insira um ISBN.');
+                    return;
+                }
+        
+                try {
+                    const response = await fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`);
+        
+                    if (response.ok) {
+                        const bookData = await response.json();
+                        const items = bookData.items;
+        
+                        if (items && items.length > 0) {
+                            const bookInfo = items[0].volumeInfo;
+        
+                            document.getElementById('title').value = bookInfo.title || '';
+                            document.getElementById('subtitle').value = bookInfo.subtitle || '';
+                            document.getElementById('author').value = (bookInfo.authors && bookInfo.authors.join(', ')) || '';
+        
+                            const bookCoverImg = document.getElementById('bookCover');
+                            if (bookInfo.imageLinks && bookInfo.imageLinks.thumbnail) {
+                                bookCoverImg.src = bookInfo.imageLinks.thumbnail;
+                                bookCoverImg.style.display = 'block';
+                            } else {
+                                bookCoverImg.style.display = 'none';
+                            }
+                        } else {
+                            alert('Livro não encontrado. Verifique o ISBN e tente novamente.');
+                        }
+                    } else {
+                        alert(`Erro ao buscar os dados do livro. Status: ${response.status} - ${response.statusText}`);
+                    }
+                } catch (error) {
+                    console.error('Erro ao buscar os dados do livro:', error);
+                    alert('Erro ao buscar os dados do livro. Verifique sua conexão ou tente mais tarde.');
+                }
+            }
 
+            function showPopup(type) {
+                const successPopup = document.getElementById('success-popup');
+                const errorPopup = document.getElementById('error-popup');
+        
+                if (type === 'success') {
+                    successPopup.classList.remove('hidden');
+                    setTimeout(() => {
+                        successPopup.classList.add('hidden');
+                    }, 3000);
+                } else {
+                    errorPopup.classList.remove('hidden');
+                    setTimeout(() => {
+                        errorPopup.classList.add('hidden');
+                    }, 4000);
+                }
+            }
+        
+            document.getElementById('bookRegistrationForm').addEventListener('submit', async function (event) {
+                event.preventDefault();
+        
+                const formData = {
+                    rfidId: document.getElementById('rfidId').value.trim(),
+                    title: document.getElementById('title').value.trim(),
+                    subtitle: document.getElementById('subtitle').value.trim(),
+                    author: document.getElementById('author').value.trim(),
+                    sinopse: document.getElementById('sinopse').value.trim(),
+                    gender: document.getElementById('gender').value.trim(),
+                    language: document.getElementById('language').value.trim(),
+                    publishDate: document.getElementById('publishDate').value,
+                };
+        
+                try {
+                    const response = await fetch('http://localhost:4001/api/management/register/book', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(formData)
+                    });
+        
+                    if (response.ok) {
+                        addBookToList(formData);
+                        document.getElementById('bookRegistrationForm').reset();
+                        showPopup('success'); // Exibe popup de sucesso
+                    } else {
+                        alert('Erro ao cadastrar livro.');
+                    }
+                } catch (error) {
+                    console.error('Erro:', error);
+                    alert('Erro ao tentar cadastrar o livro.');
+                }
+            });
+            
+            async function loadBooks() {
+                try {
+                    const response = await fetch('http://localhost:4001/api/management/get/book');
+        
+                    if (response.ok) {
+                        const books = await response.json();
+                        books.forEach(addBookToList);
+                    } else {
+                        console.error('Erro ao buscar os livros:', response.status, response.statusText);
+                    }
+                } catch (error) {
+                    console.error('Erro ao buscar os livros:', error);
+                }
+            }
+        
+            function previewImage(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        const img = document.getElementById('bookCover');
+                        img.src = e.target.result;
+                        img.style.display = 'block';
+                    }
+                    reader.readAsDataURL(file);
+                }
+            }
+        
+            function addBookToList(book) {
+                const booksContainer = document.getElementById('booksContainer');
+                const bookItem = document.createElement('tr');
+        
+                bookItem.innerHTML = `
+                    <td>${book.status}</td>  
+                    <td>${book.rfidId}</td>
+                    <td>${book.title}</td>
+                    <td>${book.subtitle || '-'}</td>
+                    <td>${book.author}</td>
+                    <td>${book.sinopse || '-'}</td>
+                    <td>${book.gender || '-'}</td>
+                    <td>${book.language || '-'}</td>
+                    <td>${book.publishDate || '-'}</td>
+                    <td><button onclick="removeBook(this)">Remover</button></td>
+                `;
+                booksContainer.appendChild(bookItem);
+            }
+
+            function removeBook(button) {
+                const row = button.parentElement.parentElement;
+                row.parentElement.removeChild(row);
+            }
+
+            window.onload = loadBooks;
+        </script>
+    </body>
 </html>
