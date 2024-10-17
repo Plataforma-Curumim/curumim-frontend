@@ -5,17 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro de Usuário</title>
     <style>
-         body {
+        body {
             font-family: Arial, sans-serif;
-            background-color: #366CC8; /* Cor de fundo azul */
+            background-color: #366CC8;
             margin: 0;
             padding: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
         }
-
+        
         .navbar {
             position: fixed;
             top: 0;
@@ -28,11 +28,11 @@
             padding: 10px 20px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
-
+        
         .navbar img {
             height: 40px;
         }
-
+        
         .navbar button {
             background-color: #A02627;
             color: #fff;
@@ -42,50 +42,67 @@
             cursor: pointer;
             font-size: 14px;
         }
-
+        
         .navbar button:hover {
             background-color: #800000;
         }
+        
         .container {
             background-color: #fff;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
             text-align: center;
-            width: 600px;
-            margin-top: 80px; /* Espaço para a navbar */
+            width: 700px;
+            margin-top: 80px;
         }
+        
         h2 {
             margin-bottom: 20px;
             color: #A02627;
         }
+        
+        .form-and-cover {
+            display: flex;
+            align-items: flex-start;
+            width: 100%;
+        }
+        
         .form-container {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 20px;
             width: 100%;
-            justify-items: center; /* Alinha os itens no centro das colunas */
+            justify-items: center;
         }
+        
         .input-field {
-            display: flex;
+            display: flex; /* Troca para flexbox */
             flex-direction: column;
-            align-items: center;
-            width: 100%;
+            align-items: center; /* Centraliza o conteúdo dentro do input-field */
+            width: auto; /* Muda para auto para não forçar largura total */
+            flex-grow: 1; /* Permite que os campos se expandam igualmente */
+            min-width: 150px; /* Largura mínima para os campos */
+            margin-left: 16px;
         }
+        
         input[type="text"], input[type="email"], input[type="password"], input[type="date"], input[type="tel"] {
             padding: 10px;
-            width: 100%;
+            width: 110%;
             border: 1px solid #ccc;
             border-radius: 4px;
             box-sizing: border-box;
         }
+        
         label {
             text-align: center;
             display: block;
             margin-bottom: 5px;
             color: #A02627;
             font-weight: bold;
+            text-align: center;
         }
+        
         .submit-button {
             background-color: #A02627;
             color: white;
@@ -94,10 +111,48 @@
             border-radius: 4px;
             cursor: pointer;
             margin-top: 20px;
-            grid-column: span 3; /* Faz o botão ocupar as três colunas */
+            grid-column: span 3;
         }
+        
         .submit-button:hover {
             background-color: #800000;
+        }
+
+        .users-list {
+            margin-top: 20px;
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 700px;
+            max-height: 300px;
+            overflow-y: auto;
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #A02627;
+            color: white;
+        }
+        
+        tbody tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        tbody tr:hover {
+            background-color: #ddd;
         }
         /* Styles for pop-ups */
         .popup {
@@ -122,18 +177,10 @@
             display: block;
             margin-bottom: 10px;
         }
-        .bottom-image {
-            position: absolute;
-            bottom: 10px;
-            left: 10px;
-            max-width: 100px;
-        }
-        .rights-reserved {
-            position: absolute;
-            bottom: 10px;
-            right: 10px;
-            font-size: 12px;
-            color: #fff;
+        .cover-upload-area span {
+            color: #A02627; /* Cor do texto */
+            font-weight: bold;
+            text-align: center; /* Centraliza o texto */
         }
     </style>
 </head>
@@ -149,6 +196,7 @@
 
     <div class="container">
         <h2>Cadastro de Usuário</h2>
+        <div class="form-and-cover">
         <form id="userRegistrationForm">
             <div class="form-container">
                 <div class="input-field">
@@ -195,6 +243,7 @@
             <button type="submit" class="submit-button">Cadastrar</button>
         </form>
     </div>
+</div>
 
     <div id="success-popup" class="popup hidden">
         <span class="checkmark">✔️</span>
@@ -205,8 +254,26 @@
         <p>Erro ao cadastrar. Tente novamente.</p>
     </div>
 
-    <img src="Arandu.png" alt="Arandu Technology" class="bottom-image">
-    <div class="rights-reserved">Todos os direitos reservados 2024© Arandu™</div>
+  <!-- Lista de Usuarios Cadastrados -->
+  <div class="users-list" id="usersList">
+    <h3>Usuários Cadastrados</h3>
+    <table id="userTableBody">
+        <thead>
+            <tr>
+                <th>ID Usuário</th>
+                    <th>Nome</th>
+                    <th>Telefone</th>
+                    <th>CPF/CNPJ</th>
+                    <th>Email</th>
+                    <th>Nome de Usuário</th>
+                    <th>Data de Nascimento</th>
+                    <th>Endereço</th>
+                    <th>Tipo</th>
+                    <th>Excluir</th>
+            </tr>
+        </thead>
+        <tbody id="usersContainer"></tbody>
+    </table>
 
     <script>
         document.getElementById('userRegistrationForm').addEventListener('submit', async function(event) {
@@ -231,18 +298,18 @@
                 showPopup('error');
                 return;
             }
-
-            try {
-                // Enviando os dados para o backend
+          try {
+              // Enviando os dados para o backend
                 const response = await fetch('http://localhost:4001/api/management/register/user', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(formData)
+                },
+                  body: JSON.stringify(formData)
                 });
 
                 if (response.ok) {
+                    addUserToList(formData)
                     showPopup('success');
                     // Limpar o formulário após o cadastro
                     document.getElementById('userRegistrationForm').reset();
@@ -252,7 +319,7 @@
                 }
             } catch (error) {
                 console.error('Erro:', error);
-                showPopup('error');
+                showPopup('Erro ao tentar cadastrar o usuário');
             }
         });
 
@@ -271,6 +338,32 @@
                     errorPopup.classList.add('hidden');
                 }, 3000); // Esconde após 3 segundos
             }
+            
+        }
+        
+    
+        function addUserToList(user) {
+            const usersContainer = document.getElementById('usersContainer');
+            const userItem = document.createElement('tr');
+    
+            userItem.innerHTML = `
+                <td>${user.idUser}</td>
+                <td>${user.name}</td>
+                <td>${user.numberPhone}</td>
+                <td>${user.cpfCnpj || '-'}</td>
+                <td>${user.email}</td>
+                <td>${user.username || '-'}</td>
+                <td>${user.dateOfBirth || '-'}</td>
+                <td>${user.address || '-'}</td>
+                <td>${user.typeUser || '-'}</td>
+                <td><button onclick="removeUser(this)">Remover</button></td>
+            `;
+            usersContainer.appendChild(userItem);
+        }
+    
+        function removeUser(button) {
+            const row = button.parentElement.parentElement;
+            row.parentElement.removeChild(row);
         }
     </script>
 </body>

@@ -22,11 +22,11 @@ app.get('/IdentificacaoLivro', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'IdentificacaoLivro.html'));
 });
 
-app.get('/confirmacaoEmprestimo', (req, res) => {
+app.get('/ConfirmacaoEmprestimo', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'ConfirmacaoEmprestimo.html'));
 });
 
-app.get('/confirmacaoDevolucao', (req, res) => {
+app.get('/ConfirmacaoDevolucao', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'ConfirmacaDevolucao.html'));
 });
 
@@ -45,7 +45,6 @@ app.get('/CadastroUsuario', (req, res) => {
 app.get('/Contato', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'Contato.html'));
 });
-
 
 // ROTAS //
 

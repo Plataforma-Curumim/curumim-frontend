@@ -150,7 +150,7 @@ function processRFID(event) {
         }
 
         console.log('RFID capturado:', rfidValue);
-        fetch('http://localhost:4001/api/management/get/book', { // Endpoint corrigido
+        fetch('http://localhost:4001/api/transaction/return', { // Endpoint corrigido
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -225,3 +225,4 @@ window.onload = function() {
 
     <img src="Arandu.png" alt="Arandu Technology" class="bottom-image">
     <div class="rights-reserved">Todos os direitos reservados 2024© Arandu™</div>
+    </body>

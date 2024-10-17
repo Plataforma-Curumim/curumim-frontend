@@ -207,14 +207,9 @@
                 const status = dataBook.status;
 
                 if (status == '1') {
-                    // Status vazio: redirecionar para empréstimo
                     startCountdown('/confirmacaoEmprestimo');
-                    console.log("Confirmacao")
                 } else if (status == '2') {
-                    // Status 1: redirecionar para devolução
                     startCountdown('/confirmacaoDevolucao');
-                    // Voltar o status para vazio no localStorage
-                    //localStorage.setItem('status', '');
                 }
 
                     } else {
