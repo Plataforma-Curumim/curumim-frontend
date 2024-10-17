@@ -115,7 +115,6 @@
 </style>
 <!-- <script>
     let isRedirected = true; // Variável de controle para redirecionamento
-
     // Função para começar o contador regressivo
     function startCountdown(duration) {
         const countdownElement = document.getElementById('countdown');
@@ -189,12 +188,10 @@
 </script> -->
 <script>
  let countdownInterval; // Declara a variável no escopo global
-
 // Função para começar o contador regressivo
 function startCountdown(duration) {
     const countdownElement = document.getElementById('countdown');
     let timeLeft = duration;
-
     countdownElement.style.display = 'block';
     
     countdownInterval = setInterval(() => {
@@ -211,7 +208,6 @@ function startCountdown(duration) {
         timeLeft -= 1;
     }, 1000);
 }
-
 // Função para processar o RFID quando a tecla Enter é pressionada
 function processRFID(event) {
     if (event.key === 'Enter') {
@@ -221,10 +217,8 @@ function processRFID(event) {
             alert('Por favor, insira um RFID válido.');
             return;
         }
-
         console.log('RFID capturado:', rfidValue);
-        //fetch('http://localhost:4001/api/management/get/book', { // Endpoint corrigido
-        fetch('http://localhost:4001/api/transaction/lend',{
+        fetch('http://localhost:4001/api/management/get/book', { // Endpoint corrigido
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -256,27 +250,22 @@ function processRFID(event) {
         });
     }
 }
-
 // Função que roda quando a página carrega
 window.onload = function() {
     document.querySelector('.rfid-input').focus(); // Foca no campo RFID
     document.querySelector('.rfid-input').addEventListener('keydown', processRFID); // Adiciona o evento para processar o RFID
-
     // Exibe o nome e título armazenados no localStorage
     document.getElementById('name').innerText = localStorage.getItem('name') || 'Usuário';
     document.getElementById('title').innerText = localStorage.getItem('title') || 'Título do Livro';
-
     // Define a data de empréstimo e devolução
     const today = new Date();
     const returnDate = new Date(); // DÚVIDA: isso é feito no banco?
     returnDate.setDate(today.getDate() + 15); // Define a devolução para 15 dias após a data atual
     document.getElementById('loanDate').innerText = today.toLocaleDateString();
     document.getElementById('returnDate').innerText = returnDate.toLocaleDateString();
-
     startCountdown(30); // Começa o contador regressivo de 30 segundos
 }
 </script>
-
 <body>
     <div class="navbar">
         <img src="LogoPlataformaCurumim.png" alt="Plataforma Curumim" class="top-image">
@@ -285,7 +274,6 @@ window.onload = function() {
         <a href="/CadastroUsuario">Cadastro de Usuário</a>
         <a href="/Contato">Sobre</a>
     </div>
-
     <div class="container">
         <h2>Confirmação de Empréstimo</h2>
         <div class="info">
@@ -297,7 +285,5 @@ window.onload = function() {
         <input type="text" class="rfid-input" placeholder="Passe o cartão RFID para confirmar">
         <div id="countdown" class="countdown"></div>
     </div>
-
     <img src="Arandu.png" alt="Arandu Technology" class="bottom-image">
     <div class="rights-reserved">Todos os direitos reservados 2024© Arandu™</div>
-</body>

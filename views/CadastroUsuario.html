@@ -237,8 +237,13 @@
                 </div>
                 <div class="input-field">
                     <label for="typeUser">Tipo de Usuário</label>
-                    <input type="text" id="typeUser" name="typeUser" required>
+                    <select id="typeUser" name="typeUser" required>
+                        <option value="" disabled selected>Selecione o Tipo de Usuário</option>
+                        <option value="1">Leitor</option>
+                        <option value="2">Bibliotecário</option>
+                    </select>
                 </div>
+                
             </div>
             <button type="submit" class="submit-button">Cadastrar</button>
         </form>

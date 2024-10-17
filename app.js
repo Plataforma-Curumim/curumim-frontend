@@ -26,10 +26,6 @@ app.get('/ConfirmacaoEmprestimo', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'ConfirmacaoEmprestimo.html'));
 });
 
-app.get('/ConfirmacaoDevolucao', (req, res) => {
-    res.sendFile(path.join(__dirname, 'views', 'ConfirmacaDevolucao.html'));
-});
-
 app.get('/Agradecimento', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'Agradecimento.html'));
 });
@@ -44,6 +40,9 @@ app.get('/CadastroUsuario', (req, res) => {
 
 app.get('/Contato', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'Contato.html'));
+});
+app.get('/ConfirmacaoDevolucao', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'ConfirmacaoDevolucao.html'));
 });
 
 // ROTAS //
@@ -131,7 +130,7 @@ app.post('/api/management/get/book', (req, res) => {
             physicalDimensions: book.physicalDimensions,
             publishPlaces: book.publishPlaces,
             numberOfPages: book.numberOfPages,
-            status: 2
+            status: 1
         };
         
         res.status(200).json(dataBook);
