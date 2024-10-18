@@ -544,17 +544,21 @@ function processRFID(event) {
             alert('Por favor, insira um RFID válido.');
             return;
         }
+        const userId = localStorage.getItem('userId');
+        console.log("User ID recuperado:", userId); // Verifique se está imprimindo corretamente no console
         console.log('RFID capturado:', bookId);
         fetch('http://localhost:4001/api/transaction/lend', { // Endpoint corrigido
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ bookId: bookId,
+            body: JSON.stringify({
+                bookId: localStorage.getItem('bookId'),
                 userId: localStorage.getItem('userId'),
-                status: localStorage.getItem(status = 1),
-                loanDate: localStorage.getItem('loganDate'),
-                returnDate: localStorage.getItem('returnDate') }) // Envia o RFID no corpo da requisição
+                status: 1,
+                //loanDate: localStorage.getItem('loganDate'),
+                //returnDate: localStorage.getItem('returnDate') 
+                }) // Envia o RFID no corpo da requisição
         })
         .then(response => {
             if (!response.ok) {
@@ -564,6 +568,7 @@ function processRFID(event) {
         })
         .then(data => {
             if (data) {
+                localStorage.setItem('userId', data.userId);
                 localStorage.setItem('name', data.userName); // Salva o nome do usuário
                 localStorage.setItem('title', data.title); // Salva o título do livro
                 document.getElementById('name').innerText = data.userName || 'Usuário';

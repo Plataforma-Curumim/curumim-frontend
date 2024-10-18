@@ -139,7 +139,7 @@
         <input type="text" class="rfid-input" placeholder="Aproxime o cartão bibliotecário do leitor" autofocus>
 
         <div id="info" class="info">
-            <p id="name"><strong>Nome:</strong></p>
+            <p id="userId"><strong>Nome:</strong></p>
         </div>
         <div id="countdown" class="countdown"></div>
     </div>
@@ -187,9 +187,9 @@
                         const dataUser = await response.json();
                         console.log('Dados recebidos:', dataUser);
 
-                        if (dataUser.name) {
-                            localStorage.setItem('name', dataUser.name);
-                            document.getElementById('name').innerHTML = `<strong>Nome:</strong> ${dataUser.name}`;
+                        if (dataUser.userId) {
+                            localStorage.setItem('userId', dataUser.userId);
+                            document.getElementById('userId').innerHTML = `<strong>Nome:</strong> ${dataUser.userId}`;
                             document.getElementById('info').style.display = 'block';
                             startCountdown('/IdentificacaoLivro');
                         } else {

@@ -55,7 +55,7 @@ app.post('/api/management/get/user', (req, res) => {
     console.log('USUARIO')
     if (!userId) {
         return res.status(400).json({ error: 'ID do usuário não fornecido' });
-    } 
+    }
     // Busca o usuário no array
     const user = users.find(user => user.userId === userId);
 
@@ -65,7 +65,7 @@ app.post('/api/management/get/user', (req, res) => {
         res.status(404).json({ error: 'Usuário não encontrado' });
     }
 });
- 
+
 // Rota de cadastro de usuário
 app.post('/api/management/register/user', (req, res) => {
     const { userId: userId, name, cpfCnpj, email, username, password, dateOfBirth, numberPhone, address, typeUser } = req.body;
@@ -80,7 +80,7 @@ app.post('/api/management/register/user', (req, res) => {
         res.status(400).json({ error: 'Dados incompletos. Preencha todos os campos corretamente.' });
     }
 });
- 
+
 
 app.post('/api/management/get/book', (req, res) => {
     const { bookId} = req.body; // Obtenha o RFID do corpo da requisição
@@ -88,7 +88,7 @@ app.post('/api/management/get/book', (req, res) => {
     console.log('BOOK')
     if (!bookId) {
         return res.status(400).json({ error: 'ID do usuário não fornecido' });
-    } 
+    }
     // Busca o usuário no array
     const book = books.find(book => book.bookId === bookId);
     if (book) {
@@ -107,7 +107,7 @@ app.post('/api/management/register/book', (req, res) => {
     if (bookId && title && author) {
         // Adiciona o livro ao array de livros
         books.push({bookId, title, subtitle, author, sinopse, gender, language, urlImage, publishers, publishDate, physicalDimensions, publishPlaces, numberOfPages, isbn
-        
+
         }); // se não tiver isbn ele vai dar problema nesse push?
 
         res.status(200).json({ message: 'Livro cadastrado com sucesso!' });
@@ -115,32 +115,74 @@ app.post('/api/management/register/book', (req, res) => {
         res.status(400).json({ error: 'Dados incompletos. Preencha todos os campos corretamente.' });
     }
 });
+
+// app.post('/api/transaction/lend', (req, res) => {
+//     const { bookId, userId, status} = req.body;
+//     console.log('Requisição recebida no /api/transaction/lend');
+//     console.log(req.body);
+//     console.log('TRANSAÇÃO EMPRESTIMO')
+
+
+//     if (!bookId && !userId) {
+//        // return res.status(400).json({ error: 'O campo bookId é obrigatório.' });
+
+
+//     // Verifica se os campos obrigatórios estão preenchidos
+//   //  if (bookId && userId ) {
+//         // Adiciona o livro ao array de livros
+//         books.push({bookId, userId, status
+
+//         }); // se não tiver isbn ele vai dar problema nesse push?
+
+//         res.status(200).json({ message: 'Livro cadastrado com sucesso!' });
+//     } else {
+//         res.status(400).json({ error: 'Dados incompletos. Preencha todos os campos corretamente.' });
+//     }
+// });
+
+
+// app.post('/api/transaction/lend', (req, res) => {
+//     const { bookId, userId, status} = req.body;
+//     console.log('Requisição recebida no /api/transaction/lend');
+//     console.log(req.body);
+//     console.log('TRANSAÇÃO EMPRESTIMO')
+
+
+//     if (!bookId && !userId) {
+//        // return res.status(400).json({ error: 'O campo bookId é obrigatório.' });
+    
+    
+//     // Verifica se os campos obrigatórios estão preenchidos
+//   //  if (bookId && userId ) {
+//         // Adiciona o livro ao array de livros
+//         books.push({bookId, userId, status
+        
+//         }); // se não tiver isbn ele vai dar problema nesse push?
+
+//         res.status(200).json({ message: 'Livro cadastrado com sucesso!' });
+//     } else {
+//         res.status(400).json({ error: 'Dados incompletos. Preencha todos os campos corretamente.' });
+//     }
+// });
 
 app.post('/api/transaction/lend', (req, res) => {
-    const { bookId, userId} = req.body;
+    const { bookId, userId, status } = req.body;
+
     console.log('Requisição recebida no /api/transaction/lend');
     console.log(req.body);
-    console.log('TRANSAÇÃO EMPRESTIMO')
 
-
-    if (!bookId && !userId) {
-       // return res.status(400).json({ error: 'O campo bookId é obrigatório.' });
-    
-    
-    // Verifica se os campos obrigatórios estão preenchidos
-  //  if (bookId && userId ) {
-        // Adiciona o livro ao array de livros
-        books.push({bookId, userId
-        
-        }); // se não tiver isbn ele vai dar problema nesse push?
-
-        res.status(200).json({ message: 'Livro cadastrado com sucesso!' });
-    } else {
-        res.status(400).json({ error: 'Dados incompletos. Preencha todos os campos corretamente.' });
+    if (!bookId || !userId || status === undefined) {
+        return res.status(400).json({ error: 'Dados incompletos. Preencha todos os campos corretamente.' });
     }
+
+    // Adicione o livro ao array de livros
+    books.push({ bookId, userId, status });
+
+    res.status(200).json({ message: 'Livro cadastrado com sucesso!' });
 });
 
- 
+
+
 app.post('/api/transaction/request', (req, res) => {
     const { bookId, title, subtitle, author, sinopse, gender, language, urlImage, publishers, publishDate, physicalDimensions, publishPlaces, numberOfPages, isbn } = req.body;
     console.log('Requisição recebida no /api/transaction/lend');
@@ -150,7 +192,7 @@ app.post('/api/transaction/request', (req, res) => {
     if (bookId && title && author) {
         // Adiciona o livro ao array de livros
         books.push({bookId, title, subtitle, author, sinopse, gender, language, urlImage, publishers, publishDate, physicalDimensions, publishPlaces, numberOfPages, isbn
-        
+
         }); // se não tiver isbn ele vai dar problema nesse push?
 
         res.status(200).json({ message: 'Livro cadastrado com sucesso!' });
@@ -169,13 +211,13 @@ app.post('/api/transaction/request', (req, res) => {
 // // Rota para buscar livro com base no RFID
 // app.post('/api/management/get/book', (req, res) => {
 //     const { bookId } = req.body; // Obtenha o RFID do corpo da requisição
-    
+
 //     if (!bookId) {
 //         return res.status(400).json({ error: 'RFID não fornecido' });
 //     }
-    
+
 //     const book = getBookByRFID(bookId);
-    
+
 //     if (book) {
 //         const dataBook = {
 //             root: {
@@ -198,7 +240,7 @@ app.post('/api/transaction/request', (req, res) => {
 //             numberOfPages: book.numberOfPages,
 //             status: 2
 //         };
-        
+
 //         res.status(200).json(dataBook);
 //     } else {
 //         res.status(404).json({ error: 'Livro não encontrado' });
@@ -209,7 +251,7 @@ app.post('/api/transaction/request', (req, res) => {
 
 app.listen(port, () => {
     console.log(`Servidor rodando em http://localhost:${port}`);
-    
+
     // const getBookByRFID = (userId) => {
     //     const books = [
     //         {
