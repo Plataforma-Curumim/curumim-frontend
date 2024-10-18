@@ -200,10 +200,11 @@
                         document.getElementById('title').innerHTML = `<strong>Título:</strong> ${dataBook.title || 'Título não disponível'}`;
                         document.getElementById('author').innerHTML = `<strong>Autor:</strong> ${dataBook.author || 'Autor não disponível'}`;
                         document.getElementById('status').innerHTML = `<strong>Status:</strong> ${dataBook.status || 'status desconhecido'}`;
+
                         // Exibe o elemento de informação
                         document.getElementById('info').style.display = 'block';
-                        //startCountdown('/confirmacaoEmprestimo');
-                                       // Verificar o status do livro
+                        
+                // Verificar o status do livro
                 const status = dataBook.status;
 
                 if (status == '1') {

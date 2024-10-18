@@ -218,7 +218,7 @@ function processRFID(event) {
             return;
         }
         console.log('RFID capturado:', rfidValue);
-        fetch('http://localhost:4001/api/management/get/book', { // Endpoint corrigido
+        fetch('http://localhost:4001/api/transaction/land', { // Endpoint corrigido
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

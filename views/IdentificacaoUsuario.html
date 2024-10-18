@@ -162,7 +162,7 @@
 
             setTimeout(() => {
                 window.location.href = redirectUrl;
-            }, 1000); // Redireciona após 1 segundo
+            }, 5000);
         }
 
         async function processRFIDIdentificationUser(event) {
@@ -171,7 +171,7 @@
 
                 if (rfidId.length === 0) {
                     console.error('RFID não pode ser vazio');
-                    return; // Não exibe mais alert
+                    return;
                 }
 
                 try {
