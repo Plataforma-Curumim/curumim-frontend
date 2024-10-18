@@ -156,13 +156,17 @@
         let countdownInterval;
 
         function startCountdown(redirectUrl) {
+            let timeLeft = 10;
             const countdownElement = document.getElementById('countdown');
             countdownElement.style.display = 'block';
-            countdownElement.innerText = 'Redirecionando...';
-
-            setTimeout(() => {
-                window.location.href = redirectUrl;
-            }, 5000);
+            countdownInterval = setInterval(function() {
+                countdownElement.innerText = `Redirecionando em ${timeLeft} segundos...`;
+                timeLeft -= 1;
+                if (timeLeft < 0) {
+                    clearInterval(countdownInterval);
+                    window.location.href = redirectUrl;
+                }
+            }, 1000);
         }
 
         async function processRFIDIdentificationUser(event) {
@@ -191,7 +195,7 @@
                             localStorage.setItem('name', dataUser.name);
                             localStorage.setItem('userId', dataUser.userId);
 
-                            document.getElementById('name').innerHTML = `<strong>Olá, </strong> ${dataUser.name} 👋`;
+                            document.getElementById('name').innerHTML = `<strong>Olá, </strong> ${dataUser.name} !`;
                             document.getElementById('info').style.display = 'block';
                             startCountdown('/IdentificacaoLivro');
                         } else {
