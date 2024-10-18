@@ -259,8 +259,8 @@
                         <button type="button" onclick="fetchBookData()">BUSCAR</button>
                     </div>
                     <div class="input-field">
-                        <label for="rfidId">RFID ID</label>
-                        <input type="text" id="rfidId" name="rfidId" required>
+                        <label for="bookId">RFID ID</label>
+                        <input type="text" id="bookId" name="bookId" required>
                     </div>
                     <div class="input-field">
                         <label for="title">Título</label>
@@ -319,7 +319,7 @@
                 <thead>
                     <tr>
                         <th>Status</th>
-                        <th>RFID ID</th>
+                        <th>BOOK ID</th>
                         <th>Título</th>
                         <th>Subtítulo</th>
                         <th>Autor</th>
@@ -397,7 +397,7 @@
                 event.preventDefault();
         
                 const formData = {
-                    rfidId: document.getElementById('rfidId').value.trim(),
+                    bookId: document.getElementById('bookId').value.trim(),
                     title: document.getElementById('title').value.trim(),
                     subtitle: document.getElementById('subtitle').value.trim(),
                     author: document.getElementById('author').value.trim(),
@@ -463,7 +463,7 @@
         
                 bookItem.innerHTML = `
                     <td>${book.status}</td>
-                    <td>${book.rfidId}</td>
+                    <td>${book.bookId}</td>
                     <td>${book.title}</td>
                     <td>${book.subtitle || '-'}</td>
                     <td>${book.author}</td>

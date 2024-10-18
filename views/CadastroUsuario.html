@@ -200,8 +200,8 @@
         <form id="userRegistrationForm">
             <div class="form-container">
                 <div class="input-field">
-                    <label for="rfidId">ID Usuário</label>
-                    <input type="text" id="rfidId" name="rfidId" required>
+                    <label for="userId">ID Usuário</label>
+                    <input type="text" id="userId" name="userId" required>
                 </div>
                 <div class="input-field">
                     <label for="name">Nome</label>
@@ -285,7 +285,7 @@
             event.preventDefault(); // Prevenir recarregamento da página
 
             const formData = {
-                idUser: document.getElementById('rfidId').value,
+                userId: document.getElementById('userId').value,
                 name: document.getElementById('name').value,
                 cpfCnpj: document.getElementById('cpfCnpj').value,
                 email: document.getElementById('email').value,
@@ -352,7 +352,7 @@
             const userItem = document.createElement('tr');
     
             userItem.innerHTML = `
-                <td>${user.idUser}</td>
+                <td>${user.userId}</td>
                 <td>${user.name}</td>
                 <td>${user.numberPhone}</td>
                 <td>${user.cpfCnpj || '-'}</td>
@@ -373,3 +373,4 @@
     </script>
 </body>
 </html>
+ 

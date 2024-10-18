@@ -170,9 +170,9 @@
 
         async function processRFIDIdentificationBook(event) {
             if (event.key === 'Enter') {
-                const rfidId = event.target.value.trim();
+                const bookId = event.target.value.trim();
 
-                if (rfidId.length === 0) {
+                if (bookId.length === 0) {
                     console.error('RFID não pode ser vazio');
                     alert('Por favor, insira um RFID válido.');
                     return;
@@ -184,7 +184,7 @@
                         headers: {
                             'Content-Type': 'application/json'
                         },
-                        body: JSON.stringify({ rfidId })
+                        body: JSON.stringify({ bookId, status })
                     });
 
                     if (response.ok) {
@@ -192,11 +192,13 @@
                         console.log('Dados recebidos:', dataBook);
 
                         // Armazenar os dados do livro no localStorage
+                        localStorage.setItem('bookId', dataBook.bookId || 'BookId não disponível')
                         localStorage.setItem('title', dataBook.title || 'Título não disponível');
                         localStorage.setItem('author', dataBook.author || 'Autor não disponível');
                         localStorage.setItem('status', dataBook.status || 'status desconhecido');
 
                         // Atualizar a exibição dos dados na página
+                       // document.getElementById('bookId').innerHTML = `<strong>BookId:</strong> ${dataBook.title || 'BookId não disponível'}`;
                         document.getElementById('title').innerHTML = `<strong>Título:</strong> ${dataBook.title || 'Título não disponível'}`;
                         document.getElementById('author').innerHTML = `<strong>Autor:</strong> ${dataBook.author || 'Autor não disponível'}`;
                         document.getElementById('status').innerHTML = `<strong>Status:</strong> ${dataBook.status || 'status desconhecido'}`;
@@ -206,11 +208,11 @@
                         
                 // Verificar o status do livro
                 const status = dataBook.status;
-
-                if (status == '1') {
+                startCountdown('/confirmacaoEmprestimo');
+                if (status == '2') {
                     startCountdown('/confirmacaoEmprestimo');
-                } else if (status == '2') {
-                    startCountdown('/ConfirmacaoDevolucao.html');
+                } else if (status == '1') {
+                    startCountdown('/confirmacaoDevolucao');
                 }
 
                     } else {
@@ -269,3 +271,4 @@
     <div class="rights-reserved">Todos os direitos reservados 2024© Arandu™</div>
 </body>
 </html>
+ 
