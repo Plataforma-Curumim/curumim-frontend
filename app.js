@@ -117,14 +117,20 @@ app.post('/api/management/register/book', (req, res) => {
 });
 
 app.post('/api/transaction/lend', (req, res) => {
-    const { bookId, title, subtitle, author, sinopse, gender, language, urlImage, publishers, publishDate, physicalDimensions, publishPlaces, numberOfPages, isbn } = req.body;
+    const { bookId, userId} = req.body;
     console.log('Requisição recebida no /api/transaction/lend');
     console.log(req.body);
     console.log('TRANSAÇÃO EMPRESTIMO')
+
+
+    if (!bookId && !userId) {
+       // return res.status(400).json({ error: 'O campo bookId é obrigatório.' });
+    
+    
     // Verifica se os campos obrigatórios estão preenchidos
-    if (bookId && title && author) {
+  //  if (bookId && userId ) {
         // Adiciona o livro ao array de livros
-        books.push({bookId, title, subtitle, author, sinopse, gender, language, urlImage, publishers, publishDate, physicalDimensions, publishPlaces, numberOfPages, isbn
+        books.push({bookId, userId
         
         }); // se não tiver isbn ele vai dar problema nesse push?
 
@@ -134,7 +140,7 @@ app.post('/api/transaction/lend', (req, res) => {
     }
 });
 
-
+ 
 app.post('/api/transaction/request', (req, res) => {
     const { bookId, title, subtitle, author, sinopse, gender, language, urlImage, publishers, publishDate, physicalDimensions, publishPlaces, numberOfPages, isbn } = req.body;
     console.log('Requisição recebida no /api/transaction/lend');
