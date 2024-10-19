@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Confirmação de Empréstimo</title>
-    <link rel="stylesheet" href="/css/styles.css">
 </head>
 <style>
     body {
         font-family: Arial, sans-serif;
-        background-color: #366CC8; /* Cor de fundo azul */
+        background-color: #366CC8;
+        /* Cor de fundo azul */
         display: flex;
         justify-content: center;
         align-items: center;
@@ -17,6 +18,7 @@
         margin: 0;
         position: relative;
     }
+
     .navbar {
         position: fixed;
         top: 0;
@@ -24,11 +26,14 @@
         width: 100%;
         background-color: #fff;
         display: flex;
-        justify-content: center; /* Alinha os botões no centro */
+        justify-content: center;
+        /* Alinha os botões no centro */
         padding: 10px 0;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        z-index: 1000; /* Garante que a navbar fique acima de outros elementos */
+        z-index: 1000;
+        /* Garante que a navbar fique acima de outros elementos */
     }
+
     .navbar a {
         color: #A02627;
         text-decoration: none;
@@ -40,29 +45,37 @@
         background-color: #f5f5f5;
         transition: background-color 0.3s, color 0.3s, transform 0.2s;
     }
+
     .navbar a:hover {
         color: #fff;
         background-color: #A02627;
         transform: scale(1.05);
     }
+
     .navbar a.active {
         background-color: #A02627;
         color: #fff;
     }
+
     .top-image-container {
         position: absolute;
-        top: 60px; /* Abaixo da navbar */
+        top: 60px;
+        /* Abaixo da navbar */
         left: 20px;
-        background-color: #fff; /* Cor do retângulo */
+        background-color: #fff;
+        /* Cor do retângulo */
         padding: 10px;
         border-radius: 8px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     }
+
     .top-image {
         max-width: 150px;
     }
+
     .container {
-        background-color: #fff; /* Cor de fundo branca */
+        background-color: #fff;
+        /* Cor de fundo branca */
         padding: 20px;
         border-radius: 8px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
@@ -72,12 +85,15 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        margin-top: 80px; /* Espaço para a navbar */
+        margin-top: 80px;
+        /* Espaço para a navbar */
     }
+
     h2 {
         margin-bottom: 20px;
         color: #A02627;
     }
+
     .info {
         margin-top: 20px;
         font-size: 16px;
@@ -86,6 +102,7 @@
         margin-bottom: 20px;
         width: 100%;
     }
+
     .rfid-input {
         margin-top: 10px;
         padding: 10px;
@@ -94,12 +111,14 @@
         width: 100%;
         text-align: center;
     }
+
     .bottom-image {
         position: absolute;
         bottom: 10px;
         left: 10px;
         max-width: 100px;
     }
+
     .rights-reserved {
         position: absolute;
         bottom: 10px;
@@ -107,6 +126,7 @@
         font-size: 12px;
         color: #fff;
     }
+
     .countdown {
         margin-top: 20px;
         font-size: 16px;
@@ -114,98 +134,95 @@
     }
 </style>
 <script>
-    let isRedirected = false; // Declara a variável no escopo global
+    let countdownInterval;
 
- let countdownInterval; // Declara a variável no escopo global
-// Função para começar o contador regressivo
-function startCountdown(duration) {
-    const countdownElement = document.getElementById('countdown');
-    let timeLeft = duration;
-    countdownElement.style.display = 'block';
-    
-    countdownInterval = setInterval(() => {
-        const minutes = Math.floor(timeLeft / 60);
-        const seconds = timeLeft % 60;
-        countdownElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-        
-        if (timeLeft <= 0 && !isRedirected) { // Verifica se o tempo acabou e não foi redirecionado ainda
-            clearInterval(countdownInterval); // Para o temporizador
-            console.log('Tempo esgotado. Redirecionando para IdentificacaoUsuario.html');
-            window.location.href = '/IdentificacaoUsuario'; // Redireciona para a página de identificação do usuário
-        }
-        
-        timeLeft -= 1;
-    }, 5000);
-}
-// Função para processar o RFID quando a tecla Enter é pressionada
-function processRFID(event) {
-    if (event.key === 'Enter') {
-        const bookId = event.target.value.trim(); // Captura o valor do campo RFID
-        if (bookId.length === 0) {
-            console.error('RFID não pode ser vazio');
-            alert('Por favor, insira um RFID válido.');
-            return;
-        }
-        const userId = localStorage.getItem('userId');
-        console.log("User ID recuperado:", userId); // Verifique se está imprimindo corretamente no console
-        console.log('RFID capturado:', bookId);
-        fetch('http://localhost:4001/api/transaction/lend', { // Endpoint corrigido
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                bookId: localStorage.getItem('bookId'),
-                userId: localStorage.getItem('userId'),
-                status: 1,
-                //loanDate: localStorage.getItem('loganDate'),
-                //returnDate: localStorage.getItem('returnDate') 
-                }) // Envia o RFID no corpo da requisição
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Erro ${response.status}: ${response.statusText}`);
+    function startCountdown(redirectUrl) {
+        let timeLeft = 10;
+        const countdownElement = document.getElementById('countdown');
+        countdownElement.style.display = 'block';
+        countdownInterval = setInterval(function () {
+            countdownElement.innerText = `Redirecionando em ${timeLeft} segundos...`;
+            timeLeft -= 1;
+            if (timeLeft < 0) {
+                clearInterval(countdownInterval);
+                window.location.href = '/';
             }
-            return response.json(); // Processa a resposta como JSON
-        })
-        .then(data => {
-            if (data) {
-                localStorage.setItem('userId', data.userId);
-                localStorage.setItem('name', data.userName); // Salva o nome do usuário
-                localStorage.setItem('bookId', data.bookId)
-                localStorage.setItem('title', data.title); // Salva o título do livro
-
-                document.getElementById('name').innerText = data.userName || 'Usuário';
-                document.getElementById('title').innerText = data.title || 'Título do Livro';
-                isRedirected = true; // Define a variável para indicar que o redirecionamento já ocorreu
-                clearInterval(countdownInterval); // Para o contador regressivo
-                console.log('Redirecionando para Agradecimento.html');
-                window.location.href = '/Agradecimento'; // Redireciona para a página de agradecimento
-            } else {
-                console.error('Dados não encontrados para o RFID:', bookId);
-            }
-        })
-        .catch(error => {
-            console.error('Erro ao buscar dados:', error);
-        });
+        }, 1000);
     }
-}
-// Função que roda quando a página carrega
-window.onload = function() {
-    document.querySelector('.rfid-input').focus(); // Foca no campo RFID
-    document.querySelector('.rfid-input').addEventListener('keydown', processRFID); // Adiciona o evento para processar o RFID
-    // Exibe o nome e título armazenados no localStorage
-    document.getElementById('name').innerText = localStorage.getItem('name') || 'Usuário';
-    document.getElementById('title').innerText = localStorage.getItem('title') || 'Título do Livro';
-    // Define a data de empréstimo e devolução
-    const today = new Date();
-    const returnDate = new Date(); // DÚVIDA: isso é feito no banco?
-    returnDate.setDate(today.getDate() + 15); // Define a devolução para 15 dias após a data atual
-    document.getElementById('loanDate').innerText = today.toLocaleDateString();
-    document.getElementById('returnDate').innerText = returnDate.toLocaleDateString();
-    startCountdown(30); // Começa o contador regressivo de 30 segundos
-}
+
+    function processRFID(event) {
+        if (event.key === 'Enter') {
+            const bookId = event.target.value.trim();
+            if (bookId.length === 0) {
+                console.error('RFID não pode ser vazio');
+                alert('Por favor, insira um RFID válido.');
+                return;
+            }
+            const userId = localStorage.getItem('userId');
+            console.log("User ID recuperado:", userId);
+            console.log('RFID capturado:', bookId);
+            fetch('http://localhost:4001/api/transaction/lend', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    bookId: localStorage.getItem('bookId'),
+                    userId: localStorage.getItem('userId'),
+                    status: 2,
+                    loanDate: localStorage.getItem('loganDate'),
+                    returnDate: localStorage.getItem('returnDate')
+                })
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Erro ${response.status}: ${response.statusText}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data) {
+                        localStorage.setItem('userId', data.userId);
+                        localStorage.setItem('name', data.userName);
+                        localStorage.setItem('bookId', data.bookId)
+                        localStorage.setItem('title', data.title);
+                        localStorage.setItem('loanDate', data.loanDate);
+                        localStorage.setItem('returnDate', data.returnDate)
+
+                        document.getElementById('name').innerText = data.userName;
+                        document.getElementById('title').innerText = data.title;
+
+                        clearInterval(countdownInterval);
+                        console.log('Redirecionando para Agradecimento.html');
+                        window.location.href = '/Agradecimento';
+                    } else {
+                        console.error('Dados não encontrados para o RFID:', bookId);
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro ao buscar dados:', error);
+                });
+        }
+    }
+
+    window.onload = function () {
+        document.querySelector('.rfid-input').focus();
+        document.querySelector('.rfid-input').addEventListener('keydown', processRFID);
+        
+        document.getElementById('name').innerText = localStorage.getItem('name');
+        document.getElementById('title').innerText = localStorage.getItem('title');
+       
+        // Define a data de empréstimo e devolução
+        const today = new Date();
+        const returnDate = new Date(); // DÚVIDA: isso é feito no banco?
+        returnDate.setDate(today.getDate() + 15); // Define a devolução para 15 dias após a data atual
+        
+        document.getElementById('loanDate').innerText = today.toLocaleDateString();
+        document.getElementById('returnDate').innerText = returnDate.toLocaleDateString();
+        startCountdown(30); // Começa o contador regressivo de 30 segundos
+    }
 </script>
+
 <body>
     <div class="navbar">
         <img src="LogoPlataformaCurumim.png" alt="Plataforma Curumim" class="top-image">
@@ -217,8 +234,8 @@ window.onload = function() {
     <div class="container">
         <h2>Confirmação de Empréstimo</h2>
         <div class="info">
-            <p><strong>Nome do Usuário:</strong> <span id="name">Usuário</span></p>
-            <p><strong>Título do Livro:</strong> <span id="title">Título do Livro</span></p>
+            <p><strong>Nome do Usuário:</strong> <span id="name"></span></p>
+            <p><strong>Título do Livro:</strong> <span id="title"></span></p>
             <p><strong>Data do Empréstimo:</strong> <span id="loanDate">__/__/____</span></p>
             <p><strong>Data de Devolução:</strong> <span id="returnDate">__/__/____</span></p>
         </div>

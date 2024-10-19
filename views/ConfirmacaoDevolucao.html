@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Confirmação de Devolução</title>
-    <link rel="stylesheet" href="/css/styles.css">
 </head>
 <style>
     body {
@@ -135,45 +134,46 @@
     }
 </style>
 <script>
-    let countdownInterval; 
+    let countdownInterval;
 
-    function startCountdown(duration) {
+    function startCountdown(redirectUrl) {
+        let timeLeft = 10;
         const countdownElement = document.getElementById('countdown');
-        let timeLeft = duration;
         countdownElement.style.display = 'block';
-
-        countdownInterval = setInterval(() => {
-            const minutes = Math.floor(timeLeft / 60);
-            const seconds = timeLeft % 60;
-            countdownElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-
-            if (timeLeft <= 0 && !isRedirected) {
-                clearInterval(countdownInterval);
-                console.log('Tempo esgotado. Redirecionando para IdentificacaoUsuario.html');
-                window.location.href = '/IdentificacaoUsuario';
-            }
-
+        countdownInterval = setInterval(function () {
+            countdownElement.innerText = `Redirecionando em ${timeLeft} segundos...`;
             timeLeft -= 1;
+            if (timeLeft < 0) {
+                clearInterval(countdownInterval);
+                window.location.href = '/';
+            }
         }, 1000);
     }
 
     function processRFID(event) {
         if (event.key === 'Enter') {
-            const rfidValue = event.target.value.trim();
-            if (rfidValue.length === 0) {
+            const bookId = event.target.value.trim();
+            if (bookId.length === 0) {
                 console.error('RFID não pode ser vazio');
                 alert('Por favor, insira um RFID válido.');
                 return;
             }
-            console.log('RFID capturado:', rfidValue);
-            fetch('http://localhost:4001/api/transaction/return', {
+            const userId = localStorage.getItem('userId');
+            console.log("User ID recuperado:", userId);
+            console.log('RFID capturado:', bookId);
+            fetch('http://localhost:4001/api/transaction/lend', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({rfidId, userName, rfidValue, title, status, loanDate, returnDate})
+                body: JSON.stringify({
+                    bookId: localStorage.getItem('bookId'),
+                    userId: localStorage.getItem('userId'),
+                    status: 2,
+                    loanDate: localStorage.getItem('loganDate'),
+                    returnDate: localStorage.getItem('returnDate')
+                })
             })
-            console.log(rfidId, userName, rfidValue, title, status, loanDate, returnDate )
                 .then(response => {
                     if (!response.ok) {
                         throw new Error(`Erro ${response.status}: ${response.statusText}`);
@@ -182,20 +182,21 @@
                 })
                 .then(data => {
                     if (data) {
+                        localStorage.setItem('userId', data.userId);
                         localStorage.setItem('name', data.userName);
+                        localStorage.setItem('bookId', data.bookId)
                         localStorage.setItem('title', data.title);
-                        localStorage.setItem('loanDate', loanDate);
-                        localStorage.setItem('returnDate', returnDate);
-                        localStorage.setItem('status', status = 1)
+                        localStorage.setItem('loanDate', data.loanDate);
+                        localStorage.setItem('returnDate', data.returnDate)
 
-                        document.getElementById('name').innerText = data.userName || 'Usuário';
-                        document.getElementById('title').innerText = data.title || 'Título do Livro';
-                        isRedirected = true; // Define a variável para indicar que o redirecionamento já ocorreu
-                        clearInterval(countdownInterval); // Para o contador regressivo
+                        document.getElementById('name').innerText = data.userName;
+                        document.getElementById('title').innerText = data.title;
+
+                        clearInterval(countdownInterval);
                         console.log('Redirecionando para Agradecimento.html');
-                        window.location.href = '/Agradecimento'; // Redireciona para a página de agradecimento
+                        window.location.href = '/Agradecimento';
                     } else {
-                        console.error('Dados não encontrados para o RFID:', rfidValue);
+                        console.error('Dados não encontrados para o RFID:', bookId);
                     }
                 })
                 .catch(error => {
@@ -203,17 +204,19 @@
                 });
         }
     }
-    // Função que roda quando a página carrega
+
     window.onload = function () {
-        document.querySelector('.rfid-input').focus(); // Foca no campo RFID
-        document.querySelector('.rfid-input').addEventListener('keydown', processRFID); // Adiciona o evento para processar o RFID
-        // Exibe o nome e título armazenados no localStorage
-        document.getElementById('name').innerText = localStorage.getItem('name') || 'Usuário';
-        document.getElementById('title').innerText = localStorage.getItem('title') || 'Título do Livro';
-        // Define a data de empréstimo e devolução
+        document.querySelector('.rfid-input').focus();
+        document.querySelector('.rfid-input').addEventListener('keydown', processRFID);
+        
+        document.getElementById('name').innerText = localStorage.getItem('name');
+        document.getElementById('title').innerText = localStorage.getItem('title');
+       
+        // Define a data de Devolução e devolução
         const today = new Date();
         const returnDate = new Date(); // DÚVIDA: isso é feito no banco?
         returnDate.setDate(today.getDate() + 15); // Define a devolução para 15 dias após a data atual
+        
         document.getElementById('loanDate').innerText = today.toLocaleDateString();
         document.getElementById('returnDate').innerText = returnDate.toLocaleDateString();
         startCountdown(30); // Começa o contador regressivo de 30 segundos
@@ -229,11 +232,11 @@
         <a href="/Contato">Sobre</a>
     </div>
     <div class="container">
-        <h2>Confirmação de Empréstimo</h2>
+        <h2>Confirmação de Devolução</h2>
         <div class="info">
-            <p><strong>Nome do Usuário:</strong> <span id="name">Usuário</span></p>
-            <p><strong>Título do Livro:</strong> <span id="title">Título do Livro</span></p>
-            <p><strong>Data do Empréstimo:</strong> <span id="loanDate">__/__/____</span></p>
+            <p><strong>Nome do Usuário:</strong> <span id="name"></span></p>
+            <p><strong>Título do Livro:</strong> <span id="title"></span></p>
+            <p><strong>Data do Devolução:</strong> <span id="loanDate">__/__/____</span></p>
             <p><strong>Data de Devolução:</strong> <span id="returnDate">__/__/____</span></p>
         </div>
         <input type="text" class="rfid-input" placeholder="Passe o cartão RFID para confirmar">

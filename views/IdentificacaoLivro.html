@@ -160,7 +160,7 @@
             countdownElement.style.display = 'block';
             countdownInterval = setInterval(function() {
                 countdownElement.innerText = `Redirecionando em ${timeLeft} segundos...`;
-                timeLeft -= 1;
+                timeLeft -= 1; 
                 if (timeLeft < 0) {
                     clearInterval(countdownInterval);
                     window.location.href = redirectUrl;
@@ -209,7 +209,8 @@
                 // Verificar o status do livro
                 const status = dataBook.status;
                 startCountdown('/confirmacaoEmprestimo');
-                if (status == '2') {
+               // startCountdown('/confirmacaoDevolucao');
+                if (status == '1') {
                     startCountdown('/confirmacaoEmprestimo');
                 } else if (status == '1') {
                     startCountdown('/confirmacaoDevolucao');
@@ -271,4 +272,3 @@
     <div class="rights-reserved">Todos os direitos reservados 2024© Arandu™</div>
 </body>
 </html>
- 

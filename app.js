@@ -165,6 +165,26 @@ app.post('/api/management/register/book', (req, res) => {
 //     }
 // });
 
+
+
+// app.post('/api/transaction/return', (req, res) => {
+//     const { bookId, userId, status } = req.body;
+
+//     console.log('Requisição recebida no /api/transaction/return');
+//     console.log(req.body);
+
+//     if (!bookId || !userId || status === undefined) {
+//         return res.status(400).json({ error: 'Dados incompletos. Preencha todos os campos corretamente.' });
+//     }
+
+//     // Adicione o livro ao array de livros
+//     books.push({ bookId, userId, status });
+
+//     res.status(200).json({ message: 'Livro cadastrado com sucesso!' });
+// });
+
+
+
 app.post('/api/transaction/lend', (req, res) => {
     const { bookId, userId, status } = req.body;
 
@@ -184,22 +204,40 @@ app.post('/api/transaction/lend', (req, res) => {
 
 
 app.post('/api/transaction/request', (req, res) => {
-    const { bookId, title, subtitle, author, sinopse, gender, language, urlImage, publishers, publishDate, physicalDimensions, publishPlaces, numberOfPages, isbn } = req.body;
-    console.log('Requisição recebida no /api/transaction/lend');
+    const { bookId, userId, status } = req.body;
+
+    console.log('Requisição recebida no /api/transaction/request');
     console.log(req.body);
-    console.log('TRANSAÇÃO EMPRESTIMO')
-    // Verifica se os campos obrigatórios estão preenchidos
-    if (bookId && title && author) {
-        // Adiciona o livro ao array de livros
-        books.push({bookId, title, subtitle, author, sinopse, gender, language, urlImage, publishers, publishDate, physicalDimensions, publishPlaces, numberOfPages, isbn
 
-        }); // se não tiver isbn ele vai dar problema nesse push?
-
-        res.status(200).json({ message: 'Livro cadastrado com sucesso!' });
-    } else {
-        res.status(400).json({ error: 'Dados incompletos. Preencha todos os campos corretamente.' });
+    if (!bookId || !userId || status === undefined) {
+        return res.status(400).json({ error: 'Dados incompletos. Preencha todos os campos corretamente.' });
     }
+
+    // Adicione o livro ao array de livros
+    books.push({ bookId, userId, status });
+
+    res.status(200).json({ message: 'Livro cadastrado com sucesso!' });
 });
+
+
+
+// app.post('/api/transaction/request', (req, res) => {
+//     const { bookId, title, subtitle, author, sinopse, gender, language, urlImage, publishers, publishDate, physicalDimensions, publishPlaces, numberOfPages, isbn } = req.body;
+//     console.log('Requisição recebida no /api/transaction/lend');
+//     console.log(req.body);
+//     console.log('TRANSAÇÃO EMPRESTIMO')
+//     // Verifica se os campos obrigatórios estão preenchidos
+//     if (bookId && title && author) {
+//         // Adiciona o livro ao array de livros
+//         books.push({bookId, title, subtitle, author, sinopse, gender, language, urlImage, publishers, publishDate, physicalDimensions, publishPlaces, numberOfPages, isbn
+
+//         }); // se não tiver isbn ele vai dar problema nesse push?
+
+//         res.status(200).json({ message: 'Livro cadastrado com sucesso!' });
+//     } else {
+//         res.status(400).json({ error: 'Dados incompletos. Preencha todos os campos corretamente.' });
+//     }
+// });
 
 
 
