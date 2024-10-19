@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Livro</title>
+</head>
+<body>
+    <h2>Editar Livro</h2>
+
+    <!-- Campo para selecionar o livro pelo Book ID -->
+    <label for="bookId">Digite o Book ID:</label>
+    <input type="text" id="bookId">
+    <button type="button" onclick="loadBookForEdit()">Carregar Livro</button>
+
+    <form id="editBookForm">
+        <label for="title">Título:</label>
+        <input type="text" id="title" required><br>
+
+        <label for="author">Autor:</label>
+        <input type="text" id="author" required><br>
+
+        <label for="subtitle">Subtítulo:</label>
+        <input type="text" id="subtitle"><br>
+
+        <label for="sinopse">Sinopse:</label>
+        <textarea id="sinopse" rows="3"></textarea><br>
+
+        <label for="gender">Gênero:</label>
+        <input type="text" id="gender"><br>
+
+        <label for="language">Idioma:</label>
+        <input type="text" id="language"><br>
+
+        <label for="publishDate">Data de Publicação:</label>
+        <input type="date" id="publishDate"><br>
+
+        <button type="button" onclick="editBook()">Salvar Alterações</button>
+    </form>
+
+    <script>
+        // Função para carregar informações do livro pelo Book ID
+        async function loadBookForEdit() {
+            const bookId = document.getElementById('bookId').value.trim();
+
+            if (!bookId) {
+                alert("Por favor, insira um Book ID válido.");
+                return;
+            }
+
+            try {
+                const response = await fetch('http://localhost:4001/api/management/get/book', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ bookId })
+                });
+
+                if (response.ok) {
+                    const book = await response.json();
+
+                    // Preencher os campos com as informações do livro
+                    document.getElementById('title').value = book.title || '';
+                    document.getElementById('author').value = book.author || '';
+                    document.getElementById('subtitle').value = book.subtitle || '';
+                    document.getElementById('sinopse').value = book.sinopse || '';
+                    document.getElementById('gender').value = book.gender || '';
+                    document.getElementById('language').value = book.language || '';
+                    document.getElementById('publishDate').value = book.publishDate || '';
+                } else {
+                    alert("Livro não encontrado. Verifique o Book ID.");
+                }
+            } catch (error) {
+                console.error("Erro na requisição:", error);
+                alert("Erro ao buscar informações do livro.");
+            }
+        }
+        async function editBook() {
+            const bookId = document.getElementById('bookId').value.trim(); // Obtém o ID do livro
+        
+            if (!bookId) {
+                alert("Por favor, insira um Book ID válido.");
+                return;
+            }
+        
+            const updatedBook = {
+                bookId: bookId,
+                title: document.getElementById('title').value.trim(),
+                subtitle: document.getElementById('subtitle').value.trim(),
+                author: document.getElementById('author').value.trim(),
+                sinopse: document.getElementById('sinopse').value.trim(),
+                gender: document.getElementById('gender').value.trim(),
+                language: document.getElementById('language').value.trim(),
+                publishDate: document.getElementById('publishDate').value,
+            };
+        
+            try {
+                const response = await fetch(`http://localhost:4001/api/management/edit/book/${bookId}`, { // Usando a URL correta
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(updatedBook)
+                });
+        
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('Livro atualizado:', data);
+                    alert('Livro atualizado com sucesso!');
+                } else {
+                    console.error('Erro ao atualizar livro:', response.statusText);
+                    alert('Erro ao atualizar o livro. Verifique se o ID está correto.');
+                }
+            } catch (error) {
+                console.error('Erro na requisição:', error);
+                alert('Erro ao realizar a atualização.');
+            }
+        }
+        
+                
+</script>        
+</body>
+</html>

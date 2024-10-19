@@ -46,6 +46,11 @@ app.get('/Contato', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'Contato.html'));
 });
 
+
+app.get('/EdicaoLivro', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'EdicaoLivro.html'));
+});
+
 // ROTAS //
 
 // BUSCA
@@ -116,74 +121,6 @@ app.post('/api/management/register/book', (req, res) => {
     }
 });
 
-// app.post('/api/transaction/lend', (req, res) => {
-//     const { bookId, userId, status} = req.body;
-//     console.log('Requisição recebida no /api/transaction/lend');
-//     console.log(req.body);
-//     console.log('TRANSAÇÃO EMPRESTIMO')
-
-
-//     if (!bookId && !userId) {
-//        // return res.status(400).json({ error: 'O campo bookId é obrigatório.' });
-
-
-//     // Verifica se os campos obrigatórios estão preenchidos
-//   //  if (bookId && userId ) {
-//         // Adiciona o livro ao array de livros
-//         books.push({bookId, userId, status
-
-//         }); // se não tiver isbn ele vai dar problema nesse push?
-
-//         res.status(200).json({ message: 'Livro cadastrado com sucesso!' });
-//     } else {
-//         res.status(400).json({ error: 'Dados incompletos. Preencha todos os campos corretamente.' });
-//     }
-// });
-
-
-// app.post('/api/transaction/lend', (req, res) => {
-//     const { bookId, userId, status} = req.body;
-//     console.log('Requisição recebida no /api/transaction/lend');
-//     console.log(req.body);
-//     console.log('TRANSAÇÃO EMPRESTIMO')
-
-
-//     if (!bookId && !userId) {
-//        // return res.status(400).json({ error: 'O campo bookId é obrigatório.' });
-    
-    
-//     // Verifica se os campos obrigatórios estão preenchidos
-//   //  if (bookId && userId ) {
-//         // Adiciona o livro ao array de livros
-//         books.push({bookId, userId, status
-        
-//         }); // se não tiver isbn ele vai dar problema nesse push?
-
-//         res.status(200).json({ message: 'Livro cadastrado com sucesso!' });
-//     } else {
-//         res.status(400).json({ error: 'Dados incompletos. Preencha todos os campos corretamente.' });
-//     }
-// });
-
-
-
-// app.post('/api/transaction/return', (req, res) => {
-//     const { bookId, userId, status } = req.body;
-
-//     console.log('Requisição recebida no /api/transaction/return');
-//     console.log(req.body);
-
-//     if (!bookId || !userId || status === undefined) {
-//         return res.status(400).json({ error: 'Dados incompletos. Preencha todos os campos corretamente.' });
-//     }
-
-//     // Adicione o livro ao array de livros
-//     books.push({ bookId, userId, status });
-
-//     res.status(200).json({ message: 'Livro cadastrado com sucesso!' });
-// });
-
-
 
 app.post('/api/transaction/lend', (req, res) => {
     const { bookId, userId, status } = req.body;
@@ -238,6 +175,40 @@ app.post('/api/transaction/request', (req, res) => {
 //         res.status(400).json({ error: 'Dados incompletos. Preencha todos os campos corretamente.' });
 //     }
 // });
+
+// Exemplo de rota no Express
+// app.get('/api/management/get/book/:isbn', async (req, res) => {
+//     const { isbn } = req.params;
+
+//     // Aqui você deve buscar o livro no banco de dados usando o ISBN
+//     const book = await findBookByISBN(isbn); // Implementar a função de busca no banco de dados
+
+//     if (book) {
+//         res.json(book);
+//     } else {
+//         res.status(404).json({ message: 'Livro não encontrado' });
+//     }
+// });
+
+
+
+// Rota PATCH para editar um livro
+app.patch('/api/management/edit/book', (req, res) => {
+    const bookId = parseInt(req.params.id); // Usa params em vez de query
+    const index = books.findIndex(b => b.id === bookId);
+
+    if (index !== -1) {
+        const updatedBook = {
+            ...books[index],
+            ...req.body // Atualiza os campos com base no corpo da requisição
+        };
+        books[index] = updatedBook; // Substitui o livro antigo pelo atualizado
+        res.json(updatedBook); // Retorna o livro atualizado
+    } else {
+        res.status(404).json({ message: 'Livro não encontrado.' }); // Resposta para livro não encontrado
+    }
+});
+
 
 
 
