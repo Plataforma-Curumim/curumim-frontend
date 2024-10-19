@@ -210,54 +210,6 @@ app.patch('/api/management/edit/book', (req, res) => {
 });
 
 
-
-
-
-// const getBookByRFID = (bookId) => {
-//     return books.find(book => book.bookId === bookId);
-// };
-
-// // Rota para buscar livro com base no RFID
-// app.post('/api/management/get/book', (req, res) => {
-//     const { bookId } = req.body; // Obtenha o RFID do corpo da requisição
-
-//     if (!bookId) {
-//         return res.status(400).json({ error: 'RFID não fornecido' });
-//     }
-
-//     const book = getBookByRFID(bookId);
-
-//     if (book) {
-//         const dataBook = {
-//             root: {
-//                 userRootId: 'root1', // Defina conforme necessário
-//                 libraryId: 'library1' // Defina conforme necessário
-//             },
-//             bookId: book.bookId,
-//             isbn: book.isbn,
-//             title: book.title,
-//             subtitle: book.subtitle,
-//             author: book.author,
-//             sinopse: book.sinopse,
-//             gender: book.gender,
-//             language: book.language,
-//             urlImage: book.urlImage,
-//             publishers: book.publishers,
-//             publishDate: book.publishDate,
-//             physicalDimensions: book.physicalDimensions,
-//             publishPlaces: book.publishPlaces,
-//             numberOfPages: book.numberOfPages,
-//             status: 2
-//         };
-
-//         res.status(200).json(dataBook);
-//     } else {
-//         res.status(404).json({ error: 'Livro não encontrado' });
-//     }
-// });
-
-
-
 app.listen(port, () => {
     console.log(`Servidor rodando em http://localhost:${port}`);
 

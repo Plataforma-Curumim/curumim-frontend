@@ -161,7 +161,7 @@
             const userId = localStorage.getItem('userId');
             console.log("User ID recuperado:", userId);
             console.log('RFID capturado:', bookId);
-            fetch('http://localhost:4001/api/transaction/lend', {
+            fetch('http://localhost:4001/api/transaction/return', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -186,8 +186,8 @@
                         localStorage.setItem('name', data.userName);
                         localStorage.setItem('bookId', data.bookId)
                         localStorage.setItem('title', data.title);
-                        localStorage.setItem('loanDate', data.loanDate);
-                        localStorage.setItem('returnDate', data.returnDate)
+                        //localStorage.setItem('loanDate', data.loanDate);
+                        //localStorage.setItem('returnDate', data.returnDate)
 
                         document.getElementById('name').innerText = data.userName;
                         document.getElementById('title').innerText = data.title;
@@ -213,12 +213,12 @@
         document.getElementById('title').innerText = localStorage.getItem('title');
        
         // Define a data de Devolução e devolução
-        const today = new Date();
-        const returnDate = new Date(); // DÚVIDA: isso é feito no banco?
-        returnDate.setDate(today.getDate() + 15); // Define a devolução para 15 dias após a data atual
+        //const today = new Date();
+        //const returnDate = new Date(); // DÚVIDA: isso é feito no banco?
+        //returnDate.setDate(today.getDate() + 15); // Define a devolução para 15 dias após a data atual
         
-        document.getElementById('loanDate').innerText = today.toLocaleDateString();
-        document.getElementById('returnDate').innerText = returnDate.toLocaleDateString();
+        //document.getElementById('loanDate').innerText = today.toLocaleDateString();
+        //document.getElementById('returnDate').innerText = returnDate.toLocaleDateString();
         startCountdown(30); // Começa o contador regressivo de 30 segundos
     }
 </script>
@@ -226,7 +226,7 @@
 <body>
     <div class="navbar">
         <img src="LogoPlataformaCurumim.png" alt="Plataforma Curumim" class="top-image">
-        <a href="/">Empréstimo/Devolução</a>
+        <a href="/">Devolução/Devolução</a>
         <a href="/CadastroLivros">Cadastro de Livro</a>
         <a href="/CadastroUsuario">Cadastro de Usuário</a>
         <a href="/Contato">Sobre</a>
@@ -243,4 +243,4 @@
         <div id="countdown" class="countdown"></div>
     </div>
     <img src="Arandu.png" alt="Arandu Technology" class="bottom-image">
-    <div class="rights-reserved">Todos os direitos reservados 2024© Arandu™</div>
+    <div class="rights-reserved">Todos os direitos reservados 2024© Arandu™</div> 

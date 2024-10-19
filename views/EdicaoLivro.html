@@ -68,6 +68,8 @@
                     document.getElementById('gender').value = book.gender || '';
                     document.getElementById('language').value = book.language || '';
                     document.getElementById('publishDate').value = book.publishDate || '';
+
+                    console.log("CAMPOS: ",bookId, title, author, subtitle, sinopse, gender, language,publishDate)
                 } else {
                     alert("Livro não encontrado. Verifique o Book ID.");
                 }
@@ -119,6 +121,6 @@
         }
         
                 
-</script>        
+</script>
 </body>
 </html>
